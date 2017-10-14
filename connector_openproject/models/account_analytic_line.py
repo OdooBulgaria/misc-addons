@@ -6,7 +6,7 @@ from odoo import fields, models
 
 
 class OpenProjectAccountAnalyticLine(models.Model):
-    _name = 'op.account.analytic.line'
+    _name = 'openproject.account.analytic.line'
     _inherit = [
         'openproject.binding',
         'openproject.age.mixin',

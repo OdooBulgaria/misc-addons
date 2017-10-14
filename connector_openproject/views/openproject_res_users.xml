@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-<record id="view_op_res_users_tree" model="ir.ui.view">
-    <field name="name">op.res.users.tree</field>
-    <field name="model">op.res.users</field>
+<record id="view_openproject_res_users_tree" model="ir.ui.view">
+    <field name="name">openproject.res.users.tree</field>
+    <field name="model">openproject.res.users</field>
     <field name="arch" type="xml">
         <tree>
             <field name="openproject_id"/>

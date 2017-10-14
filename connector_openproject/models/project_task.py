@@ -6,7 +6,7 @@ from odoo import fields, models
 
 
 class OpenProjectProjectTask(models.Model):
-    _name = 'op.project.task'
+    _name = 'openproject.project.task'
     _inherit = [
         'openproject.binding',
         'openproject.age.mixin',
@@ -26,7 +26,7 @@ class OpenProjectProjectTask(models.Model):
 
 
 class OpenProjectProjectTaskType(models.Model):
-    _name = 'op.project.task.type'
+    _name = 'openproject.project.task.type'
     _inherit = [
         'openproject.binding',
     ]

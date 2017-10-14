@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-<record id="view_op_project_project_tree" model="ir.ui.view">
-    <field name="name">op.project.project.tree</field>
-    <field name="model">op.project.project</field>
+<record id="view_openproject_project_project_tree" model="ir.ui.view">
+    <field name="name">openproject.project.project.tree</field>
+    <field name="model">openproject.project.project</field>
     <field name="arch" type="xml">
         <tree editable="top">
             <field name="op_sync"/>

@@ -6,7 +6,7 @@ from odoo import fields, models
 
 
 class OpenProjectProjectProject(models.Model):
-    _name = 'op.project.project'
+    _name = 'openproject.project.project'
     _inherit = [
         'openproject.binding',
         'openproject.age.mixin',

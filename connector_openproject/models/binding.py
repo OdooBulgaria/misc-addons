@@ -5,6 +5,8 @@
 from odoo import api, fields, models
 from odoo.addons.queue_job.job import job, related_action
 
+from ..utils import job_func, paginate
+
 
 class OpenProjectSyncableMixin(models.AbstractModel):
     _name = 'openproject.syncable.mixin'
@@ -52,6 +54,7 @@ class OpenProjectBinding(models.AbstractModel):
         'OpenProject ID',
         index=True,
         readonly=True,
+        help='Record\'s identifier on the OpenProject instance',
     )
 
     @api.model
@@ -65,8 +68,31 @@ class OpenProjectBinding(models.AbstractModel):
 
     @api.model
     @job(default_channel='root.openproject')
-    def import_batch(self, backend, filters=None, delay=True):
+    def import_batch(self, backend, filters=None, delay=True, chunked=False):
+        '''Import records from OpenProject.'''
+        with backend.work_on(self._name) as work:
+            adapter = work.component(usage='backend.adapter')
+            if adapter.paginated:
+                total = adapter.get_total(filters=filters)
+                for offset in paginate(backend.page_size, total):
+                    job_func(
+                        self,
+                        'import_batch_chunk',
+                        delay=delay)(
+                            backend, offset, filters=filters,
+                            chunked=chunked)
+            else:
+                importer = work.component(usage='batch.importer')
+                return importer.run(
+                    job_options={'delay': delay},
+                    filters=filters)
+
+    @api.model
+    @job(default_channel='root.openproject')
+    def import_batch_chunk(self, backend, offset, filters=None, chunked=False):
+        '''Import a chunk of OpenProject records at once.'''
         with backend.work_on(self._name) as work:
             importer = work.component(usage='batch.importer')
             return importer.run(
-                job_options=dict(delay=delay), filters=filters)
+                job_options={'delay': not chunked}, filters=filters,
+                offset=offset)

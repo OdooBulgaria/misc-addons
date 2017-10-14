@@ -34,15 +34,18 @@ def get_openproject_mocker():
         'Content-Type': 'image/png',
     }, body=open(test_file('image.png')))
     mocker.get(
-        'http://op/api/v3/projects', json=json_test_file('get_projects.json'))
+        'http://op/api/v3/projects', json=json_test_file('projects.json'))
     mocker.get(
         'http://op/api/v3/statuses/1', json=json_test_file('statuses_1.json'))
     mocker.get(
         'http://op/api/v3/work_packages',
-        json=json_test_file('get_project_work_packages.json'))
+        json=json_test_file('work_packages_project_6.json'))
     mocker.get(
         'http://op/api/v3/work_packages/1528',
         json=json_test_file('work_packages_1528.json'))
+    mocker.get(
+        'http://op/api/v3/work_packages/1528/activities',
+        json=json_test_file('work_packages_1528_activities.json'))
     mocker.get(
         'http://op/api/v3/time_entries',
         json=json_test_file('project_1_time_entries.json'))

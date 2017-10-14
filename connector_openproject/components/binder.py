@@ -19,10 +19,10 @@ class OpenProjectBinder(Component):
     _name = 'openproject.binder'
     _inherit = 'base.openproject.binder'
     _apply_on = [
-        'op.account.analytic.line',
-        'op.mail.message',
-        'op.project.project',
-        'op.project.task',
-        'op.project.task.type',
-        'op.res.users',
+        'openproject.account.analytic.line',
+        'openproject.mail.message',
+        'openproject.project.project',
+        'openproject.project.task',
+        'openproject.project.task.type',
+        'openproject.res.users',
     ]

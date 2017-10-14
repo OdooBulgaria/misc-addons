@@ -7,12 +7,15 @@ from .common import OpenProjectBackendTestCase, get_openproject_mocker
 
 class TestWorkPackageImport(OpenProjectBackendTestCase):
 
-    def test_work_package_is_created(self):
+    def setUp(self):
+        super(TestWorkPackageImport, self).setUp()
         with get_openproject_mocker():
             self.backend.import_projects(delay=False)
+
+    def test_work_package_is_created(self):
+        with get_openproject_mocker():
             self.backend.import_project_work_packages(delay=False)
-            # self.backend.import_single_project_work_packages('6', delay=False)
-            wp = self.env['op.project.task'].search([
+            wp = self.env['openproject.project.task'].search([
                 ('backend_id', '=', self.backend.id),
             ])
             self.assertLen(wp, 1)
@@ -31,13 +34,11 @@ class TestWorkPackageImport(OpenProjectBackendTestCase):
 
     def test_user_dependency_is_created(self):
         with get_openproject_mocker():
-            self.backend.import_projects(delay=False)
             self.backend.import_project_work_packages(delay=False)
             user = self.backend.op_user_ids
             self.assertLen(user, 1)
             self.assertEqual(user.openproject_id, '1')
             self.assertEqual(user.name, 'John Sheppard')
             self.assertEqual(user.email, 'shep@mail.com')
-            self.assertTrue(user.image)
             self.assertEqual(user.op_create_date, '2014-05-21 08:51:20')
             self.assertEqual(user.op_write_date, '2014-05-21 08:51:20')

@@ -1,10 +1,8 @@
+# -*- coding: utf-8 -*-
 # Copyright 2017 Naglis Jonaitis
 # License AGPL-3 or later (https://www.gnu.org/licenses/agpl).
 
-import base64
 import logging
-
-import requests
 
 from odoo import _
 from odoo.addons.component.core import AbstractComponent, Component
@@ -68,30 +66,6 @@ def openproject_duration(field, raise_err=False, allow_none=True):
     return modifier
 
 
-def openproject_datetime(field, raise_err=False, allow_none=True):
-
-    def modifier(self, record, to_attr):
-        value = record[field]
-        if value is None:
-            if allow_none:
-                return False
-            else:
-                raise ValueError(
-                    'Missing OpenProject datetime value for mapping '
-                    '"%s" -> "%s"' % (field, to_attr))
-        try:
-            datetime = isodate.parse_datetime(value)
-        except isodate.ISO8601Error:
-            if raise_err:
-                raise
-            _logger.exception(
-                u'Could not parse OpenProject datetime: %s '
-                u'(mapping: "%s" -> "%s")', value, field, to_attr)
-            datetime = False
-        return datetime
-    return modifier
-
-
 def openproject_date(field, raise_err=False, allow_none=True):
 
     def modifier(self, record, to_attr):
@@ -152,7 +126,7 @@ class BaseOpenProjectMapper(AbstractComponent):
         elif raise_null:
             raise ValueError('Missing OpenProject link "%s" ID' % link.key)
         else:
-            return binder.unwrap_model()
+            return self.env[link.model]
 
 
 class OpenProjectAgeMapper(AbstractComponent):
@@ -187,7 +161,7 @@ class OpenProjectUserMapper(Component):
         'base.openproject.age.mapper',
     ]
     _apply_on = [
-        'op.res.users',
+        'openproject.res.users',
     ]
 
     @mapping
@@ -225,22 +199,6 @@ class OpenProjectUserMapper(Component):
             'groups_id': [],
         }
 
-    @mapping
-    @only_create
-    def avatar(self, record):
-        avatar_url = record.get('avatar')
-        if not avatar_url:
-            return {}
-        response = requests.get(avatar_url, timeout=self.collection.timeout)
-        # FIXME(naglis): Need a better solution to check if an image is
-        # returned (and not a redirect, etc.) - load and verify with PIL,
-        # maybe?
-        ok = (response.ok and
-              response.headers.get('content-type', '').startswith('image'))
-        return {
-            'image': base64.b64encode(response.content) if ok else False,
-        }
-
 
 class OpenProjectProjectMapper(Component):
     _name = 'openproject.project.mapper'
@@ -249,7 +207,7 @@ class OpenProjectProjectMapper(Component):
         'base.openproject.age.mapper',
     ]
     _apply_on = [
-        'op.project.project',
+        'openproject.project.project',
     ]
     direct = [
         ('name', 'name'),
@@ -270,7 +228,7 @@ class OpenProjectTaskMapper(Component):
         'base.openproject.age.mapper',
     ]
     _apply_on = [
-        'op.project.task',
+        'openproject.project.task',
     ]
     direct = [
         ('subject', 'name'),
@@ -295,7 +253,7 @@ class OpenProjectTaskTypeMapper(Component):
     _name = 'openproject.task.type.mapper'
     _inherit = 'base.openproject.mapper'
     _apply_on = [
-        'op.project.task.type',
+        'openproject.project.task.type',
     ]
     direct = [
         ('name', 'name'),
@@ -310,7 +268,7 @@ class OpenProjectAccountAnalyticLineMapper(Component):
         'base.openproject.mapper',
         'base.openproject.age.mapper',
     ]
-    _apply_on = 'op.account.analytic.line'
+    _apply_on = 'openproject.account.analytic.line'
     direct = [
         (openproject_date('spentOn'), 'date'),
         (openproject_duration('hours'), 'unit_amount'),
@@ -338,20 +296,21 @@ class OpenProjectMailMessageMapper(Component):
         'base.openproject.mapper',
         'base.openproject.age.mapper',
     ]
-    _apply_on = 'op.mail.message'
+    _apply_on = 'openproject.mail.message'
 
     @mapping
     @only_create
     def main(self, record):
         activity_type = record['_type']
         if activity_type == 'Activity':
-            body = '<br/>'.join(d['html'] for d in record.get('details', []))
+            body = '<br/>'.join(d['raw'] for d in record.get('details', []))
             subtype_xml_id = 'mail_message_subtype_wp_update'
         else:
             body = openproject_text('comment')(self, record, 'body')
             subtype_xml_id = 'mail_message_subtype_wp_comment'
-        subtype = self.env.ref('connector_openproject.%s' % subtype_xml_id,
-                               raise_if_not_found=False)
+        subtype = self.env.ref(
+            'connector_openproject.%s' % subtype_xml_id,
+            raise_if_not_found=False)
         return {
             'body': body,
             'message_type': 'comment',

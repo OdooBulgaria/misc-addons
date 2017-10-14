@@ -6,7 +6,7 @@ from odoo import fields, models
 
 
 class OpenProjectMailMessage(models.Model):
-    _name = 'op.mail.message'
+    _name = 'openproject.mail.message'
     _inherit = [
         'openproject.binding',
         'openproject.age.mixin',

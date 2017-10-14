@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-<record id="op_users_action_from_backend" model="ir.actions.act_window">
+<record id="openproject_users_action_from_backend" model="ir.actions.act_window">
     <field name="name">OpenProject Users</field>
-    <field name="res_model">op.res.users</field>
+    <field name="res_model">openproject.res.users</field>
     <field name="src_model">openproject.backend</field>
     <field name="view_mode">tree,form</field>
     <field name="context">{
@@ -12,9 +12,9 @@
     <field name="domain">[('backend_id', '=', active_id)]</field>
 </record>
 
-<record id="op_projects_action_from_backend" model="ir.actions.act_window">
+<record id="openproject_projects_action_from_backend" model="ir.actions.act_window">
     <field name="name">OpenProject Projects</field>
-    <field name="res_model">op.project.project</field>
+    <field name="res_model">openproject.project.project</field>
     <field name="src_model">openproject.backend</field>
     <field name="view_mode">tree,form</field>
     <field name="context">{
@@ -23,9 +23,9 @@
     <field name="domain">[('backend_id', '=', active_id)]</field>
 </record>
 
-<record id="op_tasks_action_from_backend" model="ir.actions.act_window">
+<record id="openproject_tasks_action_from_backend" model="ir.actions.act_window">
     <field name="name">OpenProject Work Packages</field>
-    <field name="res_model">op.project.task</field>
+    <field name="res_model">openproject.project.task</field>
     <field name="src_model">openproject.backend</field>
     <field name="view_mode">tree,form</field>
     <field name="context">{
@@ -34,9 +34,9 @@
     <field name="domain">[('backend_id', '=', active_id)]</field>
 </record>
 
-<record id="op_time_entries_action_from_backend" model="ir.actions.act_window">
+<record id="openproject_time_entries_action_from_backend" model="ir.actions.act_window">
     <field name="name">OpenProject Time Entries</field>
-    <field name="res_model">op.account.analytic.line</field>
+    <field name="res_model">openproject.account.analytic.line</field>
     <field name="src_model">openproject.backend</field>
     <field name="view_mode">tree,form</field>
     <field name="context">{
@@ -63,25 +63,25 @@
                             'hover_false': 'Switch to debugging mode'
                         }}"/>
                     </button>
-                    <button name="%(op_users_action_from_backend)d"
+                    <button name="%(openproject_users_action_from_backend)d"
                         type="action"
                         class="oe_stat_button"
                         icon="fa-users">
                         <field string="Users" name="user_count" widget="statinfo"/>
                     </button>
-                    <button name="%(op_projects_action_from_backend)d"
+                    <button name="%(openproject_projects_action_from_backend)d"
                         type="action"
                         class="oe_stat_button"
                         icon="fa-folder">
                         <field string="Projects" name="project_count" widget="statinfo"/>
                     </button>
-                    <button name="%(op_tasks_action_from_backend)d"
+                    <button name="%(openproject_tasks_action_from_backend)d"
                         type="action"
                         class="oe_stat_button"
                         icon="fa-tasks">
                         <field string="Work Packages" name="task_count" widget="statinfo"/>
                     </button>
-                    <button name="%(op_time_entries_action_from_backend)d"
+                    <button name="%(openproject_time_entries_action_from_backend)d"
                         type="action"
                         class="oe_stat_button"
                         icon="fa-clock-o">
@@ -100,7 +100,7 @@
                         <field name="version"/>
                         <field name="instance_url" widget="url"/>
                     </group>
-                    <group string="Advanced" name="advanced" groups="base.group_no_one">
+                    <group name="advanced" groups="base.group_no_one">
                         <field name="api_key" password="True"/>
                         <field name="timeout"/>
                         <field name="page_size"/>

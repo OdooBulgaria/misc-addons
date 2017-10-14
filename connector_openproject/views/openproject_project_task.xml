@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-<record id="view_op_project_task_tree" model="ir.ui.view">
-    <field name="name">op.project.task.tree</field>
-    <field name="model">op.project.task</field>
+<record id="view_openproject_project_task_tree" model="ir.ui.view">
+    <field name="name">openproject.project.task.tree</field>
+    <field name="model">openproject.project.task</field>
     <field name="arch" type="xml">
         <tree>
             <field name="openproject_id" string="WP ID"/>

@@ -5,7 +5,7 @@
           "href": "/api/v3/work_packages/1528",
           "title": "Develop API"
       },
-          "schema": {
+      "schema": {
           "href": "/api/v3/work_packages/schemas/1-1-2"
       },
       "update": {
